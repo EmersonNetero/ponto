@@ -8,18 +8,7 @@ namespace api_ponto
         public static List<ResponseDTO> Parser(List<PontoDTO> pontos)
         {
             var Employees = GetEmployeeEntry(pontos);
-            var Response = new List<ResponseDTO>();
-            foreach (KeyValuePair<string, List<Entry>> employee in Employees)
-            {
-                var reponseEmployee = new ResponseDTO()
-                {
-                    AmountOfHoursWorked = CalcAmount(employee.Value),
-                    EmployeeName = employee.Key,
-                    Entries = employee.Value,
-                    PunchDate = employee.Value[0].PunchDateTime.Date
-                };
-                Response.Add(reponseEmployee);
-            }
+            var Response = MountedResponse(Employees);
             return Response;
         }
 
@@ -49,24 +38,49 @@ namespace api_ponto
             return employees;
         }
 
+        private static List<ResponseDTO> MountedResponse(Dictionary<string, List<Entry>> Employees)
+        {
+            var Response = new List<ResponseDTO>();
+            foreach (KeyValuePair<string, List<Entry>> employee in Employees)
+            {
+                for (int i = 0; i < employee.Value.Count; i += 2)
+                {
+                    var lstEntry = new List<Entry>();
+                    lstEntry.Add(new Entry()
+                    {
+                        PunchDateTime = employee.Value[i].PunchDateTime,
+                        PunchType = employee.Value[i].PunchType
+                    });
+                    lstEntry.Add(new Entry()
+                    {
+                        PunchDateTime = employee.Value[i + 1].PunchDateTime,
+                        PunchType = employee.Value[i + 1].PunchType
+                    });
+
+                    var reponseEmployee = new ResponseDTO()
+                    {
+                        AmountOfHoursWorked = CalcAmount(lstEntry),
+                        EmployeeName = employee.Key,
+                        Entries = lstEntry,
+                        PunchDate = lstEntry[0].PunchDateTime.Date
+                    };
+                    Response.Add(reponseEmployee);
+                }
+            }
+            return Response;
+        }
+
         private static float CalcAmount(List<Entry> Entries)
         {
-            float amount = 0;
             DateTime entryTime = DateTime.MinValue; // somente na declaração, esse valor não vai importar
             DateTime exitTime = DateTime.MaxValue; // somente na declaração, esse valor não vai importar
             foreach (var entry in Entries)
             {
-                if (entry.PunchType == 1) 
-                { 
-                    entryTime = entry.PunchDateTime;
-                }else
-                {
-                    exitTime = entry.PunchDateTime;
-                    var timeResult = exitTime - entryTime;
-                    amount += timeResult.Hours;
-                } 
+                if (entry.PunchType == 1) entryTime = entry.PunchDateTime;
+                exitTime = entry.PunchDateTime;
             }
-            return amount;
+            var timeResult = exitTime - entryTime;
+            return timeResult.Hours;
         }
 
     }
