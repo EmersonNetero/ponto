@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DTO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace api_ponto.Controllers
 {
@@ -13,6 +14,12 @@ namespace api_ponto.Controllers
         public IActionResult TestePonto()
         {
             return Ok("Ponto");
+        }
+
+        [HttpPost]
+        public IActionResult Ponto(List<PontoDTO> pontos)
+        {
+            return Ok(ParsePonto.Parser(pontos));
         }
     }
 }
