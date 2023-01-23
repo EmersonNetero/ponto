@@ -7,6 +7,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var OpenCors = "_openCors";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: OpenCors,
+        builder =>
+        {
+            builder.AllowAnyOrigin();
+            builder.WithMethods("PUT", "DELETE", "GET", "POST");
+            builder.AllowAnyHeader();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -16,10 +29,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(OpenCors);
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
