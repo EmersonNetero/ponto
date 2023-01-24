@@ -14,7 +14,7 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  --color-acoes: #1e6f9f;
+  --color-acoes: #55608f;
 }
 
 * {
@@ -114,11 +114,35 @@
   position: relative;
   left: 50%;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   font-size: 1rem;
 }
 .adiciona-ponto__fechar:hover {
   cursor: pointer;
+  background-color: var(--color-acoes);
+}
+
+table {
+  border-collapse: collapse;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+th,td {
+  width: 120px;
+  padding: 0.4rem;
+  background-color: rgba(255,255,255,0.2);
+	color: #fff;
+}
+
+td {
+  text-align: right;
+}
+
+th {
+	text-align: left;
+}
+
+thead th { 
   background-color: var(--color-acoes);
 }

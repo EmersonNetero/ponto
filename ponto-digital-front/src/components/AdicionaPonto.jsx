@@ -1,9 +1,9 @@
 import classNames from "classnames"
 import { useRef } from "react";
-import { Ponto, testePonto } from "../services/api";
+import { Ponto } from "../services/api";
 
 
-export function AdicionaPonto({model, setModel}) {
+export function AdicionaPonto({model, setModel, setResult}) {
 
   const nomeRef = useRef(null)
   const entradaRef = useRef(null)
@@ -31,10 +31,17 @@ export function AdicionaPonto({model, setModel}) {
       "PunchType": 2,
       "EmployeeName": nomeRef.current.value
     }
-    // const res = await Ponto([ed, d]);
-    // console.log(res.data)
-    const t = await testePonto()
-    console.log(t.data)
+    const res = await Ponto([ed, d]);
+
+    
+      setResult((prev) => {
+        if(prev[0].amountOfHoursWorked == 77) { // valor padrão da inicialização do objeto
+          return res.data
+        }
+        return [...prev, ...res.data]
+      })
+    
+    setModel(!model);
   }
 
   return (
@@ -46,9 +53,9 @@ export function AdicionaPonto({model, setModel}) {
             <label htmlFor="">Nome:</label>
             <input type="text" className="adiciona-ponto__input" ref={nomeRef}/>
             <label htmlFor="">Entrada:</label>
-            <input type="date" className="adiciona-ponto__input" ref={entradaRef}/>
+            <input type="datetime-local" className="adiciona-ponto__input" ref={entradaRef}/>
             <label htmlFor="">Saída:</label>
-            <input type="date"className="adiciona-ponto__input" ref={saidaRef}/>
+            <input type="datetime-local"className="adiciona-ponto__input" ref={saidaRef}/>
           </div>
           <button className="adiciona-ponto__button" type="submit">Bater ponto</button>
         </form>
