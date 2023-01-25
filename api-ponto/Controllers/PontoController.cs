@@ -19,7 +19,23 @@ namespace api_ponto.Controllers
         [HttpPost]
         public IActionResult Ponto(List<PontoDTO> pontos)
         {
-            return Ok(ParsePonto.Parser(pontos));
+            try
+            {
+                var response = ParsePonto.Parser(pontos);
+                return Ok(response);
+
+            }catch (OperationCanceledException)
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                var entity = new JsonResult("Erro inesperado: " + ex.Message)
+                {
+                    StatusCode = 500
+                };
+                return entity;
+            }
         }
     }
 }

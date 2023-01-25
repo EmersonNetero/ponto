@@ -80,6 +80,10 @@ namespace api_ponto
                 exitTime = entry.PunchDateTime;
             }
             var timeResult = exitTime - entryTime;
+            if(timeResult.Hours > 6)
+            {
+                throw new OperationCanceledException("Limite máximo de 6 horas diárias");
+            }
             return timeResult.Hours;
         }
 
