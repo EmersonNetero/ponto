@@ -11,6 +11,6 @@ namespace DTO
         [Required]
         public List<Entry>? Entries { get; set; }
         [Required]
-        public float AmountOfHoursWorked { get; set; }
+        public double AmountOfHoursWorked { get; set; }
     }
 }

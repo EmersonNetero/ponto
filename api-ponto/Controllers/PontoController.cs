@@ -24,9 +24,13 @@ namespace api_ponto.Controllers
                 var response = ParsePonto.Parser(pontos);
                 return Ok(response);
 
-            }catch (OperationCanceledException)
+            }catch (OperationCanceledException ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

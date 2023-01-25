@@ -1,4 +1,5 @@
 ﻿using DTO;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.OpenApi.Validations;
 
 namespace api_ponto
@@ -9,6 +10,7 @@ namespace api_ponto
         {
             var Employees = GetEmployeeEntry(pontos);
             var Response = MountedResponse(Employees);
+            DailyChecks(Response);
             return Response;
         }
 
@@ -62,7 +64,7 @@ namespace api_ponto
                         AmountOfHoursWorked = CalcAmount(lstEntry),
                         EmployeeName = employee.Key,
                         Entries = lstEntry,
-                        PunchDate = lstEntry[0].PunchDateTime.Date
+                        PunchDate = lstEntry[0].PunchDateTime
                     };
                     Response.Add(reponseEmployee);
                 }
@@ -70,7 +72,7 @@ namespace api_ponto
             return Response;
         }
 
-        private static float CalcAmount(List<Entry> Entries)
+        private static double CalcAmount(List<Entry> Entries)
         {
             DateTime entryTime = DateTime.MinValue; // somente na declaração, esse valor não vai importar
             DateTime exitTime = DateTime.MaxValue; // somente na declaração, esse valor não vai importar
@@ -84,7 +86,29 @@ namespace api_ponto
             {
                 throw new OperationCanceledException("Limite máximo de 6 horas diárias");
             }
-            return timeResult.Hours;
+            return timeResult.TotalHours;
+        }
+
+        private static bool DailyChecks(List<ResponseDTO> dailys)
+        {
+            DateTime dateTime = DateTime.MinValue;
+            string Name = dailys[0].EmployeeName;
+            foreach (var daily in dailys)
+            {
+                if (daily.EmployeeName == Name)
+                {
+                    if ((daily.PunchDate.Date != dateTime.Date) && (daily.PunchDate - dateTime).TotalHours < 11)
+                    {
+                        throw new ArgumentException("Intervalo entre as jornadas menor que 11 horas.");
+                    }
+                    dateTime = daily.PunchDate;
+                    Name = daily.EmployeeName;
+                }else
+                {
+                    return true;
+                }
+            }
+            return true;
         }
 
     }
