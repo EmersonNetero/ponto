@@ -123,11 +123,27 @@
   background-color: var(--color-acoes);
 }
 
+/*tabela*/
+
+.tabela-result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
 table {
   border-collapse: collapse;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
+.tabela__total {
+  display: flex;
+  flex-direction: column;
+}
+
+
+caption {
+  text-align: left;
+}
 th,td {
   width: 120px;
   padding: 0.4rem;
