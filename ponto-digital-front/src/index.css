@@ -109,7 +109,7 @@
 .adiciona-ponto__input {
   padding: 10px;
   height: 30px;
-  width: 120px;
+  width: 140px;
   margin-left: 0.5rem;
 }
 
@@ -131,7 +131,15 @@
 
 .adiciona-ponto__pontos p {
   color: whitesmoke;
+}
+
+p > span {
   text-decoration: underline;
+  font-size: 1rem;
+}
+
+p > span:hover {
+  cursor: pointer;
 }
 
 /*tabela*/
@@ -172,4 +180,96 @@ th {
 
 thead th { 
   background-color: var(--color-acoes);
+}
+
+
+
+.notifications {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.notification {
+  background-color: white;
+  padding: 1rem 3rem 1rem 1rem;
+  border-radius: 1rem;
+  position: relative;
+  max-width: 100%;
+  min-width: 180px;
+
+  opacity: 0;
+  transform: translateX(100%);
+
+  animation: show-notification-animation ease 350ms 1 forwards;
+}
+
+.notification--closing {
+  animation: closing-notification-animation ease 250ms 1 forwards;
+}
+
+.notification__close-button {
+  cursor: pointer;
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2rem;
+}
+
+.notification__close-button:hover {
+  background-color: gainsboro;
+}
+
+.notification__title {
+  font-size: 1rem;
+}
+
+.notification__description {
+  font-size: 0.9rem;
+}
+
+.notification--error {
+  background-color: lightcoral;
+}
+.notification--success {
+  background-color: lightgreen;
+  color: black;
+}
+.notification--warning {
+  background-color: goldenrod;
+}
+
+@keyframes show-notification-animation {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes closing-notification-animation {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }

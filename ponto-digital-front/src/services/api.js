@@ -9,9 +9,9 @@ export const api = axios.create({
 })
 
 export const Ponto = async (pontos) => {
-  return await api.post("/Ponto/Ponto", pontos);
+  return await api.post("/Ponto/Ponto", pontos)
 }
 
 export const testePonto = () => {
-  return api.get("/Ponto/TestePonto")
+  return api.get("/Ponto/TestePonto").then((result) => (result)).catch(err => (err))
 }

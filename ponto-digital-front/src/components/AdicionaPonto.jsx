@@ -3,12 +3,15 @@ import { useRef } from "react";
 import { Ponto } from "../services/api";
 import { useState } from "react";
 import { ConvertDate } from "../utils/dateConvert";
+import { useNotification } from "../hooks/NotificationHook";
+
 
 export function AdicionaPonto({ model, setModel, setResult }) {
   const nomeRef = useRef(null);
   const entradaRef = useRef(null);
   const saidaRef = useRef(null);
   const [pontos, setPontos] = useState([]);
+  const notify = useNotification();
 
   const cn = classNames("adiciona-ponto", {
     "adiciona-model": model,
@@ -33,17 +36,28 @@ export function AdicionaPonto({ model, setModel, setResult }) {
     //   PunchType: 2,
     //   EmployeeName: nomeRef.current.value,
     // };
-    const res = await Ponto(pontos);
-
-    setResult((prev) => {
-      if (prev[0].amountOfHoursWorked == 77) {
-        // valor padrão da inicialização do objeto
-        return res.data;
-      }
-      return [...prev, ...res.data];
-    });
-
-    setModel(!model);
+    const res = await Ponto(pontos).then(result => (result)).catch(err => err.response);
+    
+    if(res.status === 400) {
+      notify.warning({title: "Verifique os inputs", description: `${res.data}` });
+      return
+    }
+    else if (res.status === 200) {
+      notify.success({title: "Tabela criada com sucesso", description: "Verifique o total horas", });
+      setResult((prev) => {
+        entradaRef.current.value = "";
+        saidaRef.current.value = "";
+        if (prev[0].amountOfHoursWorked == 77) {
+          // valor padrão da inicialização do objeto
+          return res.data;
+        }
+        return [...prev, ...res.data];
+      });
+  
+      setModel(!model);
+    }else {
+      notify.error({title: "Erro", description: `${res.data}`})
+    }
   };
 
   const addPonto = () => {
@@ -63,6 +77,12 @@ export function AdicionaPonto({ model, setModel, setResult }) {
       entradaRef.current.value = "";
       saidaRef.current.value = "";
     }
+  };
+
+  const removePonto = (index) => {
+    const PontosCopy = Array.from(pontos);
+    PontosCopy.splice(index, 2);
+    setPontos(PontosCopy);
   };
 
   return (
@@ -104,9 +124,21 @@ export function AdicionaPonto({ model, setModel, setResult }) {
           Criar Tabela
         </button>
         <div className="adiciona-ponto__pontos">
-          {pontos.map((ponto, index) => (
-            index % 2 === 0 && <p key={index}>Diaria {ConvertDate(ponto.PunchDateTime)}</p>
-          ))}
+          {pontos.map(
+            (ponto, index) =>
+              index % 2 === 0 && (
+                <p key={index}>
+                  Diaria {ConvertDate(ponto.PunchDateTime)}{" "}
+                  <span
+                    onClick={() => {
+                      removePonto(index);
+                    }}
+                  >
+                    X
+                  </span>
+                </p>
+              )
+          )}
         </div>
       </div>
     </div>
