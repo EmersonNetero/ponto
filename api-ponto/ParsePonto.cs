@@ -69,7 +69,7 @@ namespace api_ponto
                     Response.Add(reponseEmployee);
                 }
             }
-            return Response;
+            return Response.OrderBy(x => x.PunchDate).ToList();
         }
 
         private static double CalcAmount(List<Entry> Entries)
