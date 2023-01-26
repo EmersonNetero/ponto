@@ -47,11 +47,7 @@ export function AdicionaPonto({ model, setModel, setResult }) {
       setResult((prev) => {
         entradaRef.current.value = "";
         saidaRef.current.value = "";
-        if (prev[0].amountOfHoursWorked == 77) {
-          // valor padrão da inicialização do objeto
-          return res.data;
-        }
-        return [...prev, ...res.data];
+        return res.data;
       });
   
       setModel(!model);

@@ -3,6 +3,7 @@ import { ConvertDate } from "../utils/dateConvert";
 export function Tabela({ result }) {
 
   let valor = 0;
+  const total = result.reduce((acc, curr) => acc + curr.amountOfHoursWorked, valor)
   return (
     <div className="tabela-result">
       <table>
@@ -39,7 +40,7 @@ export function Tabela({ result }) {
         </thead>
         <tbody>
           <tr>
-            <td>{result.reduce((acc, curr) => acc + curr.amountOfHoursWorked, valor)}</td>
+            <td>{total.toFixed(2)}</td>
           </tr>
         </tbody>
       </table>

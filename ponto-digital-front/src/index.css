@@ -49,7 +49,7 @@
 
 .ponto-digital__button:hover {
   cursor: pointer;
-  background-color: #1e709f5f;
+  background-color: var(--color-acoes-dark);
 }
 
 .adiciona-ponto {
