@@ -15,6 +15,7 @@
   -webkit-text-size-adjust: 100%;
 
   --color-acoes: #55608f;
+  --color-acoes-dark: #353c5a;
 }
 
 * {
@@ -97,7 +98,12 @@
   background-color: var(--color-acoes);
   border-radius: 3px;
   font-size: 1rem;
-
+  padding: 0.5rem;
+  margin: 1rem;
+}
+.adiciona-ponto__button:hover {
+  cursor: pointer;
+  background-color: var(--color-acoes-dark);
 }
 
 .adiciona-ponto__input {
@@ -121,6 +127,11 @@
 .adiciona-ponto__fechar:hover {
   cursor: pointer;
   background-color: var(--color-acoes);
+}
+
+.adiciona-ponto__pontos p {
+  color: whitesmoke;
+  text-decoration: underline;
 }
 
 /*tabela*/
