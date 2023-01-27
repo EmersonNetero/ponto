@@ -119,6 +119,9 @@ export function AdicionaPonto({ model, setModel, setResult }) {
         >
           Criar Tabela
         </button>
+        <p>
+          <small>* Precisa adicionar primeiro para depois criar a Tabela</small>
+        </p>
         <div className="adiciona-ponto__pontos">
           {pontos.map(
             (ponto, index) =>
